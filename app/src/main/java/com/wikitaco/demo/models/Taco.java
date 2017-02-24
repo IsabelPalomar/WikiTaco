@@ -2,9 +2,10 @@ package com.wikitaco.demo.models;
 
 public class Taco {
 
-    String name;
-    String description;
-    String imageUrl;
+    private String name;
+    private String description;
+    private String imageUrl;
+    //private int ownerId;
 
     public String getName() {
         return name;

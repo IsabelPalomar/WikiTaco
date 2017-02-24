@@ -4,7 +4,7 @@ public class Taco {
 
     private String name;
     private String description;
-    private String imageUrl;
+    //private String imageUrl;
     //private int ownerId;
 
     public String getName() {
@@ -22,13 +22,4 @@ public class Taco {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
 }

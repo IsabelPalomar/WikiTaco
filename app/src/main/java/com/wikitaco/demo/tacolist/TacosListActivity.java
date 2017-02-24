@@ -17,10 +17,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.squareup.picasso.Picasso;
 import com.wikitaco.demo.App;
 import com.wikitaco.demo.R;
 import com.wikitaco.demo.login.LoginActivity;
@@ -82,7 +82,9 @@ public class TacosListActivity extends AppCompatActivity
 
         Uri photoUrl = app.getPhotoUrl();
         if (photoUrl != null) {
-            Picasso.with(TacosListActivity.this).load(photoUrl).into(imgAvatar);
+            Glide.with(this)
+                .load(photoUrl)
+                .into(imgAvatar);
         }
 
         //recycler view
@@ -93,18 +95,20 @@ public class TacosListActivity extends AppCompatActivity
         }
 
         //mLayoutManager = new LinearLayoutManager(this);
-        /*
-        StaggeredGridLayoutManager lm =
-            new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL);
-             */
-        GridLayoutManager glm = new GridLayoutManager(this, 3);
+        GridLayoutManager glm = new GridLayoutManager(this, 2);
         glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
+
                 if (position % 3 == 2) {
-                    return 3;
+                    //return 3;
+                    return 2;
+                } else {
+                    return  1;
                 }
+                                    /*
                 switch (position % 4) {
+
                     case 1:
                     case 3:
                         return 1;
@@ -113,7 +117,9 @@ public class TacosListActivity extends AppCompatActivity
                         return 2;
                     default:
                         return  -1 ;
+
                 }
+                */
             }
         });
         rvTacos.setLayoutManager(glm);

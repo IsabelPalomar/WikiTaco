@@ -41,10 +41,12 @@ public class TacoRecyclerAdapter extends FirebaseRecyclerAdapter<Taco,TacoRecycl
           .getTacoStorageReference(
               getRef(position)
                   .getKey());
-    
+
     Glide.with(context)
         .using(new FirebaseImageLoader())
         .load(storageReference)
+        .centerCrop()
+        .crossFade()
         .into(viewHolder.ivTacoImg);
   }
 

@@ -1,4 +1,4 @@
-package com.wikitaco.demo.activities;
+package com.wikitaco.demo.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.wikitaco.demo.App;
 import com.wikitaco.demo.R;
+import com.wikitaco.demo.tacolist.TacosListActivity;
 
 import java.util.Arrays;
 

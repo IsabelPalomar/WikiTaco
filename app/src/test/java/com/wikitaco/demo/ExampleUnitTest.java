@@ -1,4 +1,4 @@
-package edu.galileo.android.wikitaco;
+package com.wikitaco.demo;
 
 import org.junit.Test;
 

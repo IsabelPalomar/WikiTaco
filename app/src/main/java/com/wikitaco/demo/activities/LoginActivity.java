@@ -1,7 +1,6 @@
 package com.wikitaco.demo.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -42,18 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseAuth auth = app.getAuth();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
-
-            String name = currentUser.getDisplayName();
-            String email = currentUser.getEmail();
-            String provider = currentUser.getProviders().get(0);
-
-            SharedPreferences pref = getSharedPreferences(app.getSharedPrefsName(), MODE_PRIVATE);
-            pref.edit().putString("provider", provider).commit();
-            pref.edit().putString("name", name).commit();
-
-            if (email != null) {
-                pref.edit().putString("email", email).commit();
-            }
 
             Intent i = new Intent(this, TacosListActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP

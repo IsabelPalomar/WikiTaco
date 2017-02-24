@@ -1,12 +1,10 @@
 package com.wikitaco.demo.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -53,6 +51,7 @@ public class TacosListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +60,9 @@ public class TacosListActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        */
 
+        //drawer setup
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -71,7 +72,29 @@ public class TacosListActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Drawer header values: picture, name, email
+        View headerLayout = navigationView.getHeaderView(0);
+        TextView txtName = (TextView)headerLayout.findViewById(R.id.txtName);
+        TextView txtEmail = (TextView)headerLayout.findViewById(R.id.txtEmail);
+        ImageView imgAvatar = (ImageView)headerLayout.findViewById(R.id.imgAvatar);
 
+        String strWelcome = String.format(getString(R.string.greeting_message), app.getName());
+        txtName.setText(strWelcome);
+
+        String email = app.getEmail();
+        if (!email.isEmpty()) {
+            txtEmail.setText(app.getEmail());
+        } else {
+            txtEmail.setVisibility(View.GONE);
+        }
+
+
+        Uri photoUrl = app.getPhotoUrl();
+        if (photoUrl != null) {
+            Picasso.with(TacosListActivity.this).load(photoUrl).into(imgAvatar);
+        }
+
+        //recycler view
         rvTacos = (RecyclerView) findViewById(R.id.rvTacos);
 
         if (rvTacos != null) {
@@ -95,8 +118,6 @@ public class TacosListActivity extends AppCompatActivity
         };
 
         rvTacos.setAdapter(adapter);
-
-
     }
 
     @Override
@@ -143,11 +164,6 @@ public class TacosListActivity extends AppCompatActivity
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        SharedPreferences pref = getSharedPreferences(app.getSharedPrefsName(), MODE_PRIVATE);
-                        pref.edit().remove("provider").commit();
-                        pref.edit().remove("email").commit();
-                        pref.edit().remove("name").commit();
-
                         Intent i = new Intent(TacosListActivity.this, LoginActivity.class);
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                             | Intent.FLAG_ACTIVITY_NEW_TASK

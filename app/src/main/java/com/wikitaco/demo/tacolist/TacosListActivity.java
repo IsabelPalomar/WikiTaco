@@ -1,4 +1,4 @@
-package com.wikitaco.demo.activities;
+package com.wikitaco.demo.tacolist;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,37 +9,28 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
 import com.wikitaco.demo.App;
 import com.wikitaco.demo.R;
-import com.wikitaco.demo.models.Taco;
+import com.wikitaco.demo.login.LoginActivity;
 
 public class TacosListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private App app;
     private RecyclerView rvTacos;
-    private RecyclerView.LayoutManager mLayoutManager;
-
-
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference mDatabaseReference = database.getReference();
-
+    //private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +82,9 @@ public class TacosListActivity extends AppCompatActivity
 
         Uri photoUrl = app.getPhotoUrl();
         if (photoUrl != null) {
-            Picasso.with(TacosListActivity.this).load(photoUrl).into(imgAvatar);
+            Glide.with(this)
+                .load(photoUrl)
+                .into(imgAvatar);
         }
 
         //recycler view
@@ -101,22 +94,37 @@ public class TacosListActivity extends AppCompatActivity
             rvTacos.setHasFixedSize(true);
         }
 
-        mLayoutManager = new LinearLayoutManager(this);
-        rvTacos.setLayoutManager(mLayoutManager);
-
-        FirebaseRecyclerAdapter<Taco,TacoViewHolder> adapter = new FirebaseRecyclerAdapter<Taco, TacoViewHolder>(
-                Taco.class,
-                R.layout.item_taco,
-                TacoViewHolder.class,
-                mDatabaseReference.child("tacos").getRef()
-        ) {
+        //mLayoutManager = new LinearLayoutManager(this);
+        GridLayoutManager glm = new GridLayoutManager(this, 2);
+        glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
-            protected void populateViewHolder(TacoViewHolder viewHolder, Taco model, int position) {
-                viewHolder.tvTacoName.setText(model.getName());
-                Picasso.with(TacosListActivity.this).load(model.getImageUrl()).into(viewHolder.ivTacoImg);
-            }
-        };
+            public int getSpanSize(int position) {
 
+                if (position % 3 == 2) {
+                    //return 3;
+                    return 2;
+                } else {
+                    return  1;
+                }
+                                    /*
+                switch (position % 4) {
+
+                    case 1:
+                    case 3:
+                        return 1;
+                    case 0:
+                    case 2:
+                        return 2;
+                    default:
+                        return  -1 ;
+
+                }
+                */
+            }
+        });
+        rvTacos.setLayoutManager(glm);
+
+        TacoRecyclerAdapter adapter = new TacoRecyclerAdapter(getApplicationContext(), app.getTacoListReference());
         rvTacos.setAdapter(adapter);
     }
 
@@ -131,31 +139,7 @@ public class TacosListActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.tacos_list, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_signout) {
@@ -177,17 +161,22 @@ public class TacosListActivity extends AppCompatActivity
         return true;
     }
 
-    public static class TacoViewHolder extends RecyclerView.ViewHolder{
-
-        TextView tvTacoName;
-        ImageView ivTacoImg;
-
-        public TacoViewHolder(View v) {
-            super(v);
-            tvTacoName = (TextView) v.findViewById(R.id.tvTacoName);
-            ivTacoImg = (ImageView) v.findViewById(R.id.ivTacoImg);
-        }
+    /*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.tacos_list, menu);
+        return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    */
 }

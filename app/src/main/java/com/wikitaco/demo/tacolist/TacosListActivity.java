@@ -88,24 +88,13 @@ public class TacosListActivity extends AppCompatActivity
 
         //recycler view
         rvTacos = (RecyclerView) findViewById(R.id.rvTacos);
-
-        /*
-        if (rvTacos != null) {
-            rvTacos.setHasFixedSize(true);
-        }
-        */
-
-        try {
-            rvTacos.setLayoutManager(app.getGridLayoutManager());
-        } catch (IllegalArgumentException iae) {
-            //TODO: Layoutmanager already attached, change to weak reference.
-        }
-
+        app.initLayoutManager();
+        rvTacos.setLayoutManager(app.getLayoutManager());
 
         TacoRecyclerAdapter adapter = new TacoRecyclerAdapter(getApplicationContext(), app.getTacoListReference());
         rvTacos.setAdapter(adapter);
-
     }
+
 
     @Override
     public void onBackPressed() {
@@ -127,6 +116,7 @@ public class TacosListActivity extends AppCompatActivity
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        app.deinitLayoutManager();
                         Intent i = new Intent(TacosListActivity.this, LoginActivity.class);
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                             | Intent.FLAG_ACTIVITY_NEW_TASK

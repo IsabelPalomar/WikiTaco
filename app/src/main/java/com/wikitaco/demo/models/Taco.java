@@ -4,8 +4,7 @@ public class Taco {
 
     private String name;
     private String description;
-    //private int ownerId;
-    //private boolean isFavorite;
+    private boolean isFavorite;
 
     public String getName() {
         return name;
@@ -21,5 +20,13 @@ public class Taco {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

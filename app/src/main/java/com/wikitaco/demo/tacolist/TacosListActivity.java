@@ -9,7 +9,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -30,7 +29,6 @@ public class TacosListActivity extends AppCompatActivity
 
     private App app;
     private RecyclerView rvTacos;
-    //private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +36,7 @@ public class TacosListActivity extends AppCompatActivity
         setContentView(R.layout.activity_tacos_list);
 
         app = (App) getApplicationContext();
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -56,7 +55,7 @@ public class TacosListActivity extends AppCompatActivity
         //drawer setup
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -65,9 +64,9 @@ public class TacosListActivity extends AppCompatActivity
 
         //Drawer header values: picture, name, email
         View headerLayout = navigationView.getHeaderView(0);
-        TextView txtName = (TextView)headerLayout.findViewById(R.id.txtName);
-        TextView txtEmail = (TextView)headerLayout.findViewById(R.id.txtEmail);
-        ImageView imgAvatar = (ImageView)headerLayout.findViewById(R.id.imgAvatar);
+        TextView txtName = (TextView) headerLayout.findViewById(R.id.txtName);
+        TextView txtEmail = (TextView) headerLayout.findViewById(R.id.txtEmail);
+        ImageView imgAvatar = (ImageView) headerLayout.findViewById(R.id.imgAvatar);
 
         String strWelcome = String.format(getString(R.string.greeting_message), app.getName());
         txtName.setText(strWelcome);
@@ -90,42 +89,22 @@ public class TacosListActivity extends AppCompatActivity
         //recycler view
         rvTacos = (RecyclerView) findViewById(R.id.rvTacos);
 
+        /*
         if (rvTacos != null) {
             rvTacos.setHasFixedSize(true);
         }
+        */
 
-        //mLayoutManager = new LinearLayoutManager(this);
-        GridLayoutManager glm = new GridLayoutManager(this, 2);
-        glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
+        try {
+            rvTacos.setLayoutManager(app.getGridLayoutManager());
+        } catch (IllegalArgumentException iae) {
+            //TODO: Layoutmanager already attached, change to weak reference.
+        }
 
-                if (position % 3 == 2) {
-                    //return 3;
-                    return 2;
-                } else {
-                    return  1;
-                }
-                                    /*
-                switch (position % 4) {
-
-                    case 1:
-                    case 3:
-                        return 1;
-                    case 0:
-                    case 2:
-                        return 2;
-                    default:
-                        return  -1 ;
-
-                }
-                */
-            }
-        });
-        rvTacos.setLayoutManager(glm);
 
         TacoRecyclerAdapter adapter = new TacoRecyclerAdapter(getApplicationContext(), app.getTacoListReference());
         rvTacos.setAdapter(adapter);
+
     }
 
     @Override
@@ -160,7 +139,6 @@ public class TacosListActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
     /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

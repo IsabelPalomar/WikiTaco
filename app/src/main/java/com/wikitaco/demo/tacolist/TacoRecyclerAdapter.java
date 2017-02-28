@@ -21,10 +21,6 @@ import com.wikitaco.demo.models.Taco;
 
 public class TacoRecyclerAdapter extends FirebaseRecyclerAdapter<Taco,TacoRecyclerAdapter.TacoViewHolder> {
   private Context context;
-
-  private static final int TYPE_FULL = 0;
-  private static final int TYPE_HALF = 1;
-  private static final int TYPE_QUARTER = 2;
   private final static int layoutId = R.layout.item_taco;
 
   public TacoRecyclerAdapter(Context context, DatabaseReference databaseReference) {

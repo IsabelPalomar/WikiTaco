@@ -4,8 +4,8 @@ public class Taco {
 
     private String name;
     private String description;
-    //private String imageUrl;
     //private int ownerId;
+    //private boolean isFavorite;
 
     public String getName() {
         return name;

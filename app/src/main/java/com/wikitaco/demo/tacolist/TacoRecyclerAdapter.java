@@ -1,6 +1,7 @@
 package com.wikitaco.demo.tacolist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,13 +15,14 @@ import com.google.firebase.storage.StorageReference;
 import com.wikitaco.demo.App;
 import com.wikitaco.demo.R;
 import com.wikitaco.demo.models.Taco;
+import com.wikitaco.demo.tacodetail.TacoDetailActivity;
 
 /**
  * Created by ykro.
  */
 
 public class TacoRecyclerAdapter extends FirebaseRecyclerAdapter<Taco,TacoRecyclerAdapter.TacoViewHolder> {
-  private Context context;
+  private static Context context;
   private final static int layoutId = R.layout.item_taco;
 
   public TacoRecyclerAdapter(Context context, DatabaseReference databaseReference) {
@@ -46,7 +48,7 @@ public class TacoRecyclerAdapter extends FirebaseRecyclerAdapter<Taco,TacoRecycl
         .into(viewHolder.ivTacoImg);
   }
 
-  public static class TacoViewHolder extends RecyclerView.ViewHolder{
+  public static class TacoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     TextView tvTacoName;
     ImageView ivTacoImg;
@@ -55,6 +57,13 @@ public class TacoRecyclerAdapter extends FirebaseRecyclerAdapter<Taco,TacoRecycl
       super(v);
       tvTacoName = (TextView) v.findViewById(R.id.tvTacoName);
       ivTacoImg = (ImageView) v.findViewById(R.id.ivTacoImg);
+      v.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+      Intent intent = new Intent(context, TacoDetailActivity.class);
+      context.startActivity(intent);
     }
   }
 }

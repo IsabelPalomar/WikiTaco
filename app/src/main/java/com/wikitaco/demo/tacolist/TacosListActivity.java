@@ -23,9 +23,12 @@ import com.google.android.gms.tasks.Task;
 import com.wikitaco.demo.App;
 import com.wikitaco.demo.R;
 import com.wikitaco.demo.login.LoginActivity;
+import com.wikitaco.demo.models.Taco;
+import com.wikitaco.demo.tacodetail.TacoDetailActivity;
 
 public class TacosListActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+                   OnItemClickListener {
 
     private App app;
     private RecyclerView rvTacos;
@@ -91,7 +94,9 @@ public class TacosListActivity extends AppCompatActivity
         app.initLayoutManager();
         rvTacos.setLayoutManager(app.getLayoutManager());
 
-        TacoRecyclerAdapter adapter = new TacoRecyclerAdapter(getApplicationContext(), app.getTacoListReference());
+        TacoRecyclerAdapter adapter = new TacoRecyclerAdapter(getApplicationContext(),
+                                                              app.getTacoListReference(),
+                                                              this);
         rvTacos.setAdapter(adapter);
     }
 
@@ -128,6 +133,17 @@ public class TacosListActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onItemClick(Taco taco) {
+        Intent intent = new Intent(this, TacoDetailActivity.class);
+        intent.putExtra(TacoDetailActivity.TACO_ID_KEY, taco.getId());
+        intent.putExtra(TacoDetailActivity.TACO_NAME_KEY, taco.getName());
+        //intent.putExtra(TacoDetailActivity.TACO_FAVORITE_KEY, taco.getFavorite());
+        intent.putExtra(TacoDetailActivity.TACO_DESCRIPTION_KEY, taco.getDescription());
+
+        startActivity(intent);
     }
     /*
     @Override

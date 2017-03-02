@@ -2,9 +2,9 @@ package com.wikitaco.demo;
 
 import android.app.Application;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,13 +32,13 @@ public class App extends Application {
   private StorageReference firebaseStorageReference;
 
   private boolean favoritesEnabled;
+  private GridLayoutManager gridLayoutManager;
 
   private final static String NEW_TACOS_TOPIC = "tacos";
   private final static String TACO_LIST_CHILD = "tacos";
   private final static String TACO_LIST_EXPERIMENT_VARIANT_A = "variant_a";
   private final static String TACO_LIST_EXPERIMENT_VARIANT_B = "variant_b";
 
-  GridLayoutManager gridLayoutManager;
   @Override
   public void onCreate() {
     super.onCreate();
@@ -62,7 +62,7 @@ public class App extends Application {
         .build();
     firebaseRemoteConfig.setConfigSettings(configSettings);
     firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
-    favoritesEnabled = firebaseRemoteConfig.getBoolean("favorites_enabled");
+    //favoritesEnabled = firebaseRemoteConfig.getBoolean("favorites_enabled");
   }
 
   public FirebaseAuth getAuth() {
@@ -115,7 +115,6 @@ public class App extends Application {
           @Override
           public void onComplete(@NonNull Task<Void> task) {
             if (task.isSuccessful()) {
-              Log.e("ASDF", "fetched");
               firebaseRemoteConfig.activateFetched();
 
               //fetch remote value
@@ -162,4 +161,7 @@ public class App extends Application {
   }
 
 
+  public void logEvent(String event, Bundle eventInfo) {
+    firebaseAnalytics.logEvent(event, eventInfo);
+  }
 }

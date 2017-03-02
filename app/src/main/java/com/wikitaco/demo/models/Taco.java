@@ -4,6 +4,7 @@ public class Taco {
     private transient String id;
     private String name;
     private String description;
+    private float rating;
     //private boolean favorite;
 
     public String getName() {
@@ -28,5 +29,13 @@ public class Taco {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 }

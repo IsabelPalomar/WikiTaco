@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +24,7 @@ public class TacoDetailActivity extends AppCompatActivity {
     public final static String TACO_NAME_KEY = "name";
     //public final static String TACO_FAVORITE_KEY = "favorite";
     public final static String TACO_DESCRIPTION_KEY = "description";
+    public final static String TACO_RATING_KEY = "rating";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class TacoDetailActivity extends AppCompatActivity {
         String name = intent.getStringExtra(TACO_NAME_KEY);
         //boolean favorite = intent.getBooleanExtra(TACO_FAVORITE_KEY, false);
         String description = intent.getStringExtra(TACO_DESCRIPTION_KEY);
+        float rating = intent.getFloatExtra(TACO_RATING_KEY, 0);
 
         ImageView ivTacoImg = (ImageView)findViewById(R.id.ivTacoImg);
         StorageReference storageReference = app.getTacoStorageReference(id);
@@ -59,6 +62,14 @@ public class TacoDetailActivity extends AppCompatActivity {
         txtDescription.setText(description);
 
 
+        RatingBar rbTacoRating = (RatingBar) findViewById(R.id.rbTacoRating);
+        if (rating == 0.0f) {
+            rating = 0;
+            FirebaseCrash.log("No rating available for " + id);
+        }
+        rbTacoRating.setRating(rating);
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
       /*
         if (favorite) {
@@ -68,7 +79,7 @@ public class TacoDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Taco saved as favorite!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

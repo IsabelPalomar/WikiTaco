@@ -1,14 +1,18 @@
 package com.wikitaco.demo.tacolist;
 
+import android.app.Activity;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -25,6 +29,8 @@ import com.wikitaco.demo.R;
 import com.wikitaco.demo.login.LoginActivity;
 import com.wikitaco.demo.models.Taco;
 import com.wikitaco.demo.tacodetail.TacoDetailActivity;
+
+import static com.wikitaco.demo.R.id.ivTacoImg;
 
 public class TacosListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -43,17 +49,6 @@ public class TacosListActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
 
         //drawer setup
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -92,7 +87,7 @@ public class TacosListActivity extends AppCompatActivity
         //recycler view
         rvTacos = (RecyclerView) findViewById(R.id.rvTacos);
         app.initLayoutManager();
-        rvTacos.setLayoutManager(app.getLayoutManager());
+        rvTacos.setLayoutManager(new LinearLayoutManager(this));
 
         TacoRecyclerAdapter adapter = new TacoRecyclerAdapter(getApplicationContext(),
                                                               app.getTacoListReference(),
@@ -103,6 +98,7 @@ public class TacosListActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        supportFinishAfterTransition();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -142,9 +138,20 @@ public class TacosListActivity extends AppCompatActivity
         intent.putExtra(TacoDetailActivity.TACO_NAME_KEY, taco.getName());
         //intent.putExtra(TacoDetailActivity.TACO_FAVORITE_KEY, taco.getFavorite());
         intent.putExtra(TacoDetailActivity.TACO_DESCRIPTION_KEY, taco.getDescription());
+        intent.putExtra(TacoDetailActivity.TACO_RATING_KEY, taco.getRating());
 
-        startActivity(intent);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, (View) findViewById(R.id.ivTacoImg), "tacoImg");
+        startActivity(intent, options.toBundle());
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        supportFinishAfterTransition();
+    }
+
+
     /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

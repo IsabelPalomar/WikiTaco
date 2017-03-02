@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -34,6 +35,7 @@ public class TacoRecyclerAdapter extends FirebaseRecyclerAdapter<Taco,TacoRecycl
   protected void populateViewHolder(TacoViewHolder viewHolder, Taco model, int position) {
     viewHolder.setClickListener(model, this.clickListener);
     viewHolder.tvTacoName.setText(model.getName());
+      viewHolder.rbTacoRating.setRating(model.getRating());
 
     if (model.getId() == null) {
       model.setId(getRef(position).getKey());
@@ -53,24 +55,26 @@ public class TacoRecyclerAdapter extends FirebaseRecyclerAdapter<Taco,TacoRecycl
 
   public static class TacoViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView tvTacoName;
-    private ImageView ivTacoImg;
-    private View view;
+      private TextView tvTacoName;
+      private ImageView ivTacoImg;
+      private View view;
+      private RatingBar rbTacoRating;
 
-    public TacoViewHolder(View v) {
-      super(v);
-      tvTacoName = (TextView) v.findViewById(R.id.tvTacoName);
-      ivTacoImg = (ImageView) v.findViewById(R.id.ivTacoImg);
-      this.view = v;
-    }
+      public TacoViewHolder(View v) {
+          super(v);
+          tvTacoName = (TextView) v.findViewById(R.id.tvTacoName);
+          ivTacoImg = (ImageView) v.findViewById(R.id.ivTacoImg);
+          rbTacoRating = (RatingBar) v.findViewById(R.id.rbTacoRating);
+          this.view = v;
+      }
 
-    public void setClickListener(final Taco taco, final OnItemClickListener clickListener) {
-      view.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          clickListener.onItemClick(taco);
-        }
-      });
-    }
+      public void setClickListener(final Taco taco, final OnItemClickListener clickListener) {
+          view.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+                  clickListener.onItemClick(taco);
+              }
+          });
+      }
   }
 }

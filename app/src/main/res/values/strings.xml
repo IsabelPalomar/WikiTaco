@@ -4,7 +4,7 @@
     <string name="login.btn.msg.facebook">Facebook</string>
     <string name="login.btn.msg.email">Email</string>
     <string name="login.msg.signup">Dont have a WikiTaco account? Sign up now!</string>
-    <string name="title_activity_tacos_list">TacosListActivity</string>
+    <string name="title_activity_tacos_list">Tacos</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -102,4 +102,5 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="taco.detail.msg.rating">Rating:</string>
 </resources>

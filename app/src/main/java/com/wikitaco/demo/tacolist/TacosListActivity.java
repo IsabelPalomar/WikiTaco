@@ -138,6 +138,11 @@ public class TacosListActivity extends AppCompatActivity
     @Override
     public void onItemClick(Taco taco) {
         Intent intent = new Intent(this, TacoDetailActivity.class);
+        intent.putExtra(TacoDetailActivity.TACO_ID_KEY, taco.getId());
+        intent.putExtra(TacoDetailActivity.TACO_NAME_KEY, taco.getName());
+        //intent.putExtra(TacoDetailActivity.TACO_FAVORITE_KEY, taco.getFavorite());
+        intent.putExtra(TacoDetailActivity.TACO_DESCRIPTION_KEY, taco.getDescription());
+
         startActivity(intent);
     }
     /*

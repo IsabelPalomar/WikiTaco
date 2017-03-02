@@ -35,11 +35,13 @@ public class TacoRecyclerAdapter extends FirebaseRecyclerAdapter<Taco,TacoRecycl
     viewHolder.setClickListener(model, this.clickListener);
     viewHolder.tvTacoName.setText(model.getName());
 
+    if (model.getId() == null) {
+      model.setId(getRef(position).getKey());
+    }
+
     StorageReference storageReference =
         ((App)context.getApplicationContext())
-          .getTacoStorageReference(
-              getRef(position)
-                  .getKey());
+          .getTacoStorageReference(model.getId());
 
     Glide.with(context)
         .using(new FirebaseImageLoader())

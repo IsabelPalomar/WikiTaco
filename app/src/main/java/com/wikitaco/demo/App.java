@@ -2,6 +2,7 @@ package com.wikitaco.demo;
 
 import android.app.Application;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 
@@ -160,4 +161,7 @@ public class App extends Application {
   }
 
 
+  public void logEvent(String event, Bundle eventInfo) {
+    firebaseAnalytics.logEvent(event, eventInfo);
+  }
 }

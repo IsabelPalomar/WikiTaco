@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="25dp"
     android:clickable="true"
+    android:layout_margin="5dp"
     android:orientation="vertical">
 
     <ImageView
@@ -32,6 +33,7 @@
             android:textStyle="bold" />
 
         <RatingBar
+            android:visibility="gone"
             android:id="@+id/rbTacoRating"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"

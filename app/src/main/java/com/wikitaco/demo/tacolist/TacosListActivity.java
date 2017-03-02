@@ -87,7 +87,7 @@ public class TacosListActivity extends AppCompatActivity
         //recycler view
         rvTacos = (RecyclerView) findViewById(R.id.rvTacos);
         app.initLayoutManager();
-        rvTacos.setLayoutManager(new LinearLayoutManager(this));
+        rvTacos.setLayoutManager(app.getLayoutManager());
 
         TacoRecyclerAdapter adapter = new TacoRecyclerAdapter(getApplicationContext(),
                                                               app.getTacoListReference(),

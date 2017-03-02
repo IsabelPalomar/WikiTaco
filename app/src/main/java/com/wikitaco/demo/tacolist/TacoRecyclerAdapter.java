@@ -1,7 +1,6 @@
 package com.wikitaco.demo.tacolist;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,23 +14,25 @@ import com.google.firebase.storage.StorageReference;
 import com.wikitaco.demo.App;
 import com.wikitaco.demo.R;
 import com.wikitaco.demo.models.Taco;
-import com.wikitaco.demo.tacodetail.TacoDetailActivity;
 
 /**
  * Created by ykro.
  */
 
 public class TacoRecyclerAdapter extends FirebaseRecyclerAdapter<Taco,TacoRecyclerAdapter.TacoViewHolder> {
-  private static Context context;
+  private Context context;
+  private OnItemClickListener clickListener;
   private final static int layoutId = R.layout.item_taco;
 
-  public TacoRecyclerAdapter(Context context, DatabaseReference databaseReference) {
+  public TacoRecyclerAdapter(Context context, DatabaseReference databaseReference, OnItemClickListener clickListener) {
     super(Taco.class, layoutId, TacoViewHolder.class, databaseReference);
     this.context = context;
+    this.clickListener = clickListener;
   }
 
   @Override
   protected void populateViewHolder(TacoViewHolder viewHolder, Taco model, int position) {
+    viewHolder.setClickListener(model, this.clickListener);
     viewHolder.tvTacoName.setText(model.getName());
 
     StorageReference storageReference =
@@ -48,22 +49,26 @@ public class TacoRecyclerAdapter extends FirebaseRecyclerAdapter<Taco,TacoRecycl
         .into(viewHolder.ivTacoImg);
   }
 
-  public static class TacoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+  public static class TacoViewHolder extends RecyclerView.ViewHolder {
 
-    TextView tvTacoName;
-    ImageView ivTacoImg;
+    private TextView tvTacoName;
+    private ImageView ivTacoImg;
+    private View view;
 
     public TacoViewHolder(View v) {
       super(v);
       tvTacoName = (TextView) v.findViewById(R.id.tvTacoName);
       ivTacoImg = (ImageView) v.findViewById(R.id.ivTacoImg);
-      v.setOnClickListener(this);
+      this.view = v;
     }
 
-    @Override
-    public void onClick(View v) {
-      Intent intent = new Intent(context, TacoDetailActivity.class);
-      context.startActivity(intent);
+    public void setClickListener(final Taco taco, final OnItemClickListener clickListener) {
+      view.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          clickListener.onItemClick(taco);
+        }
+      });
     }
   }
 }
